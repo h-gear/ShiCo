@@ -64,9 +64,9 @@ class kbTokenizer:
     def tokenizeFile(self, sFile):
         try:
             fhInput = codecs.open(sFile, mode='r', encoding='utf8')
-        except IOError, oError:
-            print >>sys.stderr, "[ERROR] Error while opening '%s'" % sFile
-            print >>sys.stderr, "[ERROR] '%s'" % oError
+        except (IOError, oError) as Exception:
+            print("[ERROR] Error while opening '%s'" % sFile, file=sys.stderr)
+            print("[ERROR] '%s'" % oError, file=sys.stderr)
             exit(1)
 
         sText = fhInput.read()
@@ -96,4 +96,4 @@ if __name__ == "__main__":
     aTextTokens = oKbTokenizer.tokenizeFile(oArgs.INPUT_FILE)
 
     for aSentenceTokens in aTextTokens:
-        print "%s" % aSentenceTokens
+        print("%s" % aSentenceTokens)

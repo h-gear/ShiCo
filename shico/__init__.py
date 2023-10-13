@@ -1,8 +1,8 @@
 from .vocabularymonitor import VocabularyMonitor
 from .vocabularyaggregator import VocabularyAggregator
-import format
-import server
-import extras
+import shico.format
+import shico.server
+import shico.extras
 
 __all__ = ['VocabularyMonitor',
            'VocabularyAggregator', 'server', 'format', 'extras']

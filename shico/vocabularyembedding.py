@@ -2,7 +2,7 @@ import numpy as np
 
 from sortedcontainers import SortedDict
 from sklearn import manifold
-from format import wordLocationAsDict, getRangeMiddle
+from shico.format import wordLocationAsDict, getRangeMiddle
 
 
 def _getPairwiseDistances(wordsT1, model):

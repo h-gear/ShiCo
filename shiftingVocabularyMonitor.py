@@ -18,9 +18,9 @@ def loadAllModels(sGlobPattern, dModels={}, bReplace=True, bBinary=True):
       sModelName = sModelName[23:]
       
     if (sModelName in dModels) and not bReplace:
-      print "[%s]: already in" % sModelName
+      print("[%s]: already in" % sModelName)
     else:
-      print "[%s]: %s" % (sModelName, sModelFile)
+      print("[%s]: %s" % (sModelName, sModelFile))
       dModels[sModelName] = gensim.models.word2vec.Word2Vec.load_word2vec_format(sModelFile, binary=bBinary)
 
   return dModels
@@ -227,11 +227,11 @@ def trackClouds3(dModels, aSeedTerms, sOutputFile=None,
   bBackwards = True if (sDirection == 'backwards') else False
 
   # First line always contains the seed terms
-  print >>fh, ",".join(aSeedTerms)
+  print(",".join(aSeedTerms), file=fh)
   # Second line is always the direction
-  print >>fh, sDirection
+  print(sDirection, file=fh)
   # Third line is always the description
-  print >>fh, sDescription
+  print(sDescription, file=fh)
 
   aSeedSet = aSeedTerms
   dResult = {}
@@ -269,9 +269,9 @@ def trackClouds3(dModels, aSeedTerms, sOutputFile=None,
                              bDebug=bDebug)
 
     if bSumOfDistances:
-      print >>fh, "%s\t%s" % (sKey, ' '.join(["%s (%.2f)" % (x[0], x[1]) for x in dResult[sKey]]))
+      print("%s\t%s" % (sKey, ' '.join(["%s (%.2f)" % (x[0], x[1]) for x in dResult[sKey]])), file=fh)
     else:
-      print >>fh, "%s\t%s" % (sKey, ' '.join(["%s (%d)" % (x[0], x[1]) for x in dResult[sKey]]))
+      print("%s\t%s" % (sKey, ' '.join(["%s (%d)" % (x[0], x[1]) for x in dResult[sKey]])), file=fh)
 
     # Make a new seed set
     aSeedSet = [x[0] for x in dResult[sKey]]
@@ -330,20 +330,20 @@ def trackVocab(dModels, aSeedTerms, iMaxNrOfTerms=10, iMaxNrOfRelatedTerms=10,
                                   iMaxNrOfTerms=iMaxNrOfTerms,
                                   fMinDist=fMinDist)
 
-    print "%s: %s" % (sKey, aSeedSet)
+    print("%s: %s" % (sKey, aSeedSet))
 
 def trackWord(dModels, sTerm, iMaxNrOfRelatedTerms=10, fMinDist=0.0):
   aSortedKeys = sorted(dModels.keys())
   for sKey in aSortedKeys:
     try:
-      print "%s: %s" % \
+      print("%s: %s" % \
           (sKey,
            ", ".join(["%s (%.2f)" % (x[0], x[1]) for x in \
                         dModels[sKey].most_similar(sTerm,
                                                    topn=iMaxNrOfRelatedTerms)\
-                        if x[1] > fMinDist]))
+                        if x[1] > fMinDist])))
     except KeyError:
-      print "%s: []" % sKey
+      print("%s: []" % sKey)
 
 def trackWords(dModels, aTerms, sDirection, sDescription, sOutputFile=None,
                iMaxNrOfRelatedTerms=10, fMinDist=0.0):
@@ -352,28 +352,28 @@ def trackWords(dModels, aTerms, sDirection, sDescription, sOutputFile=None,
     fh = codecs.open(sOutputFile, mode='w', encoding='utf8')
 
   # First line always contains the seed terms
-  print >>fh, ",".join(aTerms)
+  print(",".join(aTerms), file=fh)
   # Actually the directi0n doesn't mean anything here. We just always have it
   # on the second line, so the rest of the code can rely on this...
-  print >>fh, sDirection
+  print(sDirection, file=fh)
   # And third line is always the description
-  print >>fh, sDescription
+  print(sDescription, file=fh)
 
   aSortedKeys = sorted(dModels.keys())
   for sKey in aSortedKeys:
     try:
       aWordEmbeddings = initialVectors(dModels[sKey], sKey, aTerms)
       if len(aWordEmbeddings) == 0:
-        print >>fh, "%s\t" % sKey
+        print("%s\t" % sKey, file=fh)
       else:
         npaMeanVector = np.mean(aWordEmbeddings, axis=0)
 
-        print >>fh, "%s\t%s" % \
+        print("%s\t%s" % \
             (sKey,
              " ".join(surroundingWords(dModels[sKey], npaMeanVector,
-                                       fMinDist, iMaxNrOfRelatedTerms)))
+                                       fMinDist, iMaxNrOfRelatedTerms))), file=fh)
     except KeyError:
-      print >>fh, "%s\t" % sKey
+      print("%s\t" % sKey, file=fh)
 
   if sOutputFile is not None:
     fh.close()
@@ -415,10 +415,10 @@ def trackCloud1(oModel, aTerms, iMaxNrOfTerms=10, iMaxNrOfRelatedTerms=10,
       ###
       npaAllCosines = cosineSimilarities(npaEmbeddings, npaEmbeddings)
       aCoordinates = np.where(npaAllCosines == npaAllCosines[npaCosineSims > 0].min())
-      print "%s" % list(aCoordinates)
-      #print "Most distant terms are: %s, %s" % (aTerms[aCoordinates[0][0]],
-      #                                          aTerms[aCoordinates[0][1]])
-      #print "Del: %d" % npaCosineSims.argmin()
+      print("%s" % list(aCoordinates))
+      #print("Most distant terms are: %s, %s" % (aTerms[aCoordinates[0][0]],
+      #                                          aTerms[aCoordinates[0][1]]))
+      #print("Del: %d" % npaCosineSims.argmin())
       ###
       iDelIndex = aCoordinates[0][0]
       iDelIndex2 = aCoordinates[0][1]
@@ -429,12 +429,12 @@ def trackCloud1(oModel, aTerms, iMaxNrOfTerms=10, iMaxNrOfRelatedTerms=10,
       npaEuclideanDistances = \
           euclidean_distances(npaEmbeddings, np.array([npaMean]))
 
-      print "%s" % zip(aTerms, [x[0] for x in npaEuclideanDistances])
+      print("%s" % zip(aTerms, [x[0] for x in npaEuclideanDistances]))
 
       iDelIndex = \
           euclidean_distances(npaEmbeddings, np.array([npaMean])).argmax()
 
-    print "Throwing out [1] %s" % aTerms[iDelIndex]
+    print("Throwing out [1] %s" % aTerms[iDelIndex])
     # Cut it from the embeddings
     npaEmbeddings = npaEmbeddings[range(iDelIndex) + \
                                     range(iDelIndex+1, npaEmbeddings.shape[0])]
@@ -444,7 +444,7 @@ def trackCloud1(oModel, aTerms, iMaxNrOfTerms=10, iMaxNrOfRelatedTerms=10,
     if iDelIndex2 is not None:
       if iDelIndex2 > iDelIndex:
         iDelIndex2 -= 1
-      print "Throwing out [2] %s" % aTerms[iDelIndex2]
+      print("Throwing out [2] %s" % aTerms[iDelIndex2])
       # Cut it from the embeddings
       npaEmbeddings = \
           npaEmbeddings[range(iDelIndex2) + \
@@ -458,7 +458,7 @@ def trackCloud1(oModel, aTerms, iMaxNrOfTerms=10, iMaxNrOfRelatedTerms=10,
   # Enrich with related terms in this period
   aNewTerms = []
   for sTerm in aTerms:
-    #print "Finding most similar for %s" % sTerm
+    #print("Finding most similar for %s" % sTerm)
     # Get the most similar terms (they come as tuples: (term, distance))
     aNewTerms += [x[0] for x in oModel.most_similar(sTerm,
                                                     topn=iMaxNrOfRelatedTerms)
@@ -472,7 +472,7 @@ def trackCloud2(oModel, aTerms, iMaxNrOfTerms=50, iMaxNrOfRelatedTerms=5,
   # Enrich with related terms in this period
   aNewTerms = []
   for sTerm in aTerms:
-    #print "Finding most similar for %s" % sTerm
+    #print("Finding most similar for %s" % sTerm)
     # Get the most similar terms (they come as tuples: (term, distance))
     aNewTerms += [x[0] for x in oModel.most_similar(sTerm,
                                                     topn=iMaxNrOfRelatedTerms)
@@ -498,7 +498,7 @@ def trackCloud2(oModel, aTerms, iMaxNrOfTerms=50, iMaxNrOfRelatedTerms=5,
     elif sDist == 'eucl':
       iDelIndex = \
           euclidean_distances(npaEmbeddings, np.array([npaMean])).argmax()
-    print "Throwing out %s" % aNewTerms[iDelIndex]
+    print("Throwing out %s" % aNewTerms[iDelIndex])
     # Cut it from the embeddings
     npaEmbeddings = npaEmbeddings[range(iDelIndex) + \
                                     range(iDelIndex+1, npaEmbeddings.shape[0])]
@@ -541,7 +541,7 @@ def initialVectors(oModel, sModelName, aTerms):
     try:
       aWordEmbeddings.append(oModel[sTerm])
     except KeyError:
-      print "[WARNING]: Word %s is unknown in %s" % (sTerm, sModelName)
+      print("[WARNING]: Word %s is unknown in %s" % (sTerm, sModelName))
 
   return aWordEmbeddings
 
@@ -557,12 +557,12 @@ def trackAreaInSpace(dModels, aTerms, fMinDist=0.1, iTopN=10,
     return None
     
   for sModelKey in aModelKeys:
-    print sModelKey[0:4]
+    print(sModelKey[0:4])
     for iIndex in range(len(aTerms)):
-      print "%s: %s" % (aTerms[iIndex],
+      print("%s: %s" % (aTerms[iIndex],
                         surroundingWords(dModels[sModelKey],
                                          npaInitialVectors[iIndex],
-                                         fMinDist, iTopN, bDebug=bDebug))
+                                         fMinDist, iTopN, bDebug=bDebug)))
 
 ## Storing function ###########################################################
 
@@ -579,7 +579,7 @@ def storeAllResults_fromFile(sInputFile, sOutputDir, dModels, bVerbose=False,
     aSeedTerms = sSeedWords.split(" ")
 
     if sDirection not in ['forwards', 'backwards']:
-      print "[ERROR] no valid direction on line %d: %s" % (iLineNr, sLine)
+      print("[ERROR] no valid direction on line %d: %s" % (iLineNr, sLine))
       exit(1)
 
     storeAllResults(sOutputDir, dModels, aSeedTerms, sDirection=sDirection,
@@ -595,7 +595,7 @@ def storeAllResults(sOutputDir, dModels, aSeedTerms, iMaxNrOfTerms=10,
                     bDebug=False, bVerbose=False, bTrackWords=True):
 
   if sDirection not in ['forwards', 'backwards']:
-    print "[ERROR] %s is not a valid direction" % sDirection
+    print("[ERROR] %s is not a valid direction" % sDirection)
     exit(1)
 
   for fMinDist in [.6, .65, .7]:
@@ -607,7 +607,7 @@ def storeAllResults(sOutputDir, dModels, aSeedTerms, iMaxNrOfTerms=10,
       # Just track the words
       sFileName = "trackWords_%s.txt" % sFileAppendix
       if bVerbose:
-        print "Doing %s" % sFileName 
+        print("Doing %s" % sFileName)
       sOutputFile = os.path.join(sOutputDir, sFileName)
       trackWords(dModels, aSeedTerms, sDirection, sDescription,
                  sOutputFile=sOutputFile,
@@ -622,7 +622,7 @@ def storeAllResults(sOutputDir, dModels, aSeedTerms, iMaxNrOfTerms=10,
         sFileName = "trackClouds_%s_%s_%s_%s.txt" % \
             (sDirection, sLinkType, sSumOfDist, sFileAppendix)
         if bVerbose:
-          print "Doing %s" % sFileName 
+          print("Doing %s" % sFileName)
         sOutputFile = os.path.join(sOutputDir, sFileName)
   
         trackClouds3(dModels, aSeedTerms, sOutputFile=sOutputFile,

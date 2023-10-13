@@ -1,8 +1,8 @@
 import six
 from sortedcontainers import SortedDict
 from collections import defaultdict
-from utils import weightJSD, weightGauss, weightLinear
-from format import getRangeMiddle
+from shico.utils import weightJSD, weightGauss, weightLinear
+from shico.format import getRangeMiddle
 
 
 class VocabularyAggregator():

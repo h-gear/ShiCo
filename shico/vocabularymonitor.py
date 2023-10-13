@@ -6,7 +6,7 @@ from gensim.models import KeyedVectors
 
 from sortedcontainers import SortedDict
 from collections import defaultdict, Counter
-from functools32 import lru_cache
+from functools import lru_cache
 
 
 class VocabularyMonitor():
@@ -55,10 +55,10 @@ class VocabularyMonitor():
 
                 def loader(name): return KeyedVectors.load(name, mmap=mmap)
 
-            print '[%s]: %s' % (sModelName, sModelFile)
+            print('[%s]: %s' % (sModelName, sModelFile))
             self._models[sModelName] = loader(sModelFile)
             if useCache:
-                print '...caching model ', sModelName
+                print('...caching model ', sModelName)
                 self._models[sModelName] = CachedW2VModelEvaluator(
                     self._models[sModelName])
 

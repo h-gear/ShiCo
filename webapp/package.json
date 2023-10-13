@@ -53,5 +53,9 @@
   },
   "overrides": {
     "colors@>1.4.0": "1.4.0"
-  }
+  },
+  "description": "shico",
+  "main": "gulpfile.js",
+  "author": "",
+  "license": "Apache-2.0"
 }

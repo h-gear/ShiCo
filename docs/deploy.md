@@ -20,7 +20,7 @@ $ python shico/server/app.py -f "word2vecModels/????_????.w2v"
 
 You can check that the server is up and running by connecting to the server using curl (or your web browser):
 ```
-http://localhost:5000/load-settings
+http://localhost:8000/load-settings
 ```
 
 Alternatively you use [Gunicorn](http://gunicorn.org/), by setting your configuration on *shico/server/config.py* and then running:
@@ -29,19 +29,19 @@ Alternatively you use [Gunicorn](http://gunicorn.org/), by setting your configur
 $ gunicorn --bind 0.0.0.0:8000 --timeout 1200 shico.server.wsgi:app
 ```
 
-## Launching the front end
+## Launching the front end (does not work)
 
-The necessary files for serving the front end are located in the *webapp* folder. You will need to edit your configuration file (*webapp/srs/config.json*) to tell the front end where your back end is running. For example, if your backend is running on *localhost* port 5000 as in the example above, you would set your configuration file as follows:
+The necessary files for serving the front end are located in the *webapp* folder. You will need to edit your configuration file (*webapp/src/config.json*) to tell the front end where your back end is running. For example, if your backend is running on *localhost* port 8000 as in the example above, you would set your configuration file as follows:
 
 ```
 {
-  "baseURL": "http://localhost:5000"
+  "baseURL": "http://localhost:8000"
 }
 ```
 
 If you are familiar with the Javascript world, you can use the *gulp* tasks provided. You can serve your front end as follows (from the *webapp* folder):
 ```
-$ gulp serve
+$ gulp serve # gulp and phantomjs do not run at our systems
 ```
 
 You can build a deployable version (minified, uglified, etc) as follows:

@@ -1,5 +1,5 @@
 import re
-from HTMLParser import HTMLParser
+from html.parser import HTMLParser
 from lxml import etree
 from bs4 import BeautifulSoup
 
@@ -68,10 +68,10 @@ def getArticlesFromSoup_fast(soup):
 # datafile = 'data/times-20101217/0FFO-2010-1217.xml'
 # soup = getSoupFromXML(datafile)
 # articles = getArticlesFromSoup(soup)
-# print len(articles)
+# print(len(articles))
 # title, body = articles[100]
-# print 'Title  :',title
-# print 'Content:\n', body
+# print('Title  :',title)
+# print('Content:\n', body)
 
 
 # ## Load XML and save as CSV
@@ -91,21 +91,21 @@ savePath = 'myTimes/'
 # Save / load as CSV
 for year in yearFiles:
     yearPath = origPath + year
-    print 'YearPath: ',yearPath
+    print('YearPath: ',yearPath)
     for datafile in glob(yearPath + '/**/0FFO*.xml'):
-        print 'Loading   : ',datafile
+        print('Loading   : ',datafile)
 
         yearDir = savePath + year + '/'
 
         if not os.path.exists(yearDir):
-            print 'create ',yearDir
+            print('create ',yearDir)
             os.makedirs(yearDir)
 
         saveFile = yearDir + os.path.basename(datafile)
         saveFile = saveFile.replace('.xml', '.csv')
 
         if not os.path.exists(saveFile):
-            print '...save as: ',saveFile
+            print('...save as: ',saveFile)
 
             soup = getSoupFromXML_fast(datafile)
             articles = getArticlesFromSoup_fast(soup)
@@ -117,4 +117,4 @@ for year in yearFiles:
             del articles
             del df
         else:
-            print '...aleady exists: ',saveFile
+            print('...aleady exists: ',saveFile)

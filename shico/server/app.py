@@ -16,7 +16,10 @@ Usage:
 from docopt import docopt
 
 from flask import Flask, current_app, jsonify
-from flask.ext.cors import CORS
+from flask_cors import CORS
+
+import sys
+sys.path.append(".")
 
 from shico.vocabularyaggregator import VocabularyAggregator
 from shico.vocabularyembedding import doSpaceEmbedding
@@ -49,10 +52,17 @@ def trackWord(terms):
     '''VocabularyMonitor.trackClouds service. Expects a list of terms to be
     sent to the Vocabulary monitor, and returns a JSON representation of the
     response.'''
-    params = app.config['trackParser'].parse_args()
+    print("1", terms, app.config)
+    print("1.1", app.config["trackParser"])
+    #params = app.config['trackParser'].parse_args()
+    params = { 'maxTerms': 5, 'maxRelatedTerms': 5, 'startKey': "", 'endKey': "", "minSim": "", 'wordBoost': "", 'forwards': "", "boostMethod": "", "algorithm": "", "aggWeighFunction": "", "aggWFParam": "", "aggYearsInInterval": "", "aggWordsPerYear": "", "doCleaning": "",}
+    print("2")
     termList = terms.split(',')
+    print("3")
     termList = [term.strip() for term in termList]
+    print("4")
     termList = [term.lower() for term in termList]
+    print("5")
     results, links = \
         app.config['vm'].trackClouds(termList, maxTerms=params['maxTerms'],
                                      maxRelatedTerms=params['maxRelatedTerms'],
@@ -66,15 +76,17 @@ def trackWord(terms):
                                      cleaningFunction=app.config['cleaningFunction'] if params[
             'doCleaning'] else None
         )
+    print("6")
     agg = VocabularyAggregator(weighF=params['aggWeighFunction'],
                                wfParam=params['aggWFParam'],
                                yearsInInterval=params['aggYearsInInterval'],
                                nWordsPerYear=params['aggWordsPerYear']
                                )
+    print("7")
 
     aggResults, aggMetadata = agg.aggregate(results)
-    print "ResKeys", results.keys()
-    print "AggResKeys", aggResults.keys()
+    print("ResKeys", results.keys())
+    print("AggResKeys", aggResults.keys())
     stream = yearTuplesAsDict(aggResults)
     networks = yearlyNetwork(aggMetadata, aggResults, results, links)
     embedded = doSpaceEmbedding(app.config['vm'], results, aggMetadata)
@@ -86,6 +98,7 @@ def trackWord(terms):
 
 if __name__ == "__main__":
     arguments = docopt(__doc__)
+    print(arguments)
     files = arguments['-f']
     binary = not arguments['--non-binary']
     useMmap = arguments['--use-mmap']
@@ -98,4 +111,4 @@ if __name__ == "__main__":
                 w2vFormat, cleaningFunctionStr)
 
     app.debug = arguments['-d']
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=port)

@@ -89,7 +89,7 @@ def _buildLinks(yLinks, nodeIdx):
                 if seed in nodeIdx and word in nodeIdx:
                     linkList.append(_buildLink(seed, word, distance, nodeIdx))
                 else:
-                    print 'Seed or word not in index!'
+                    print('Seed or word not in index!')
     return linkList
 
 

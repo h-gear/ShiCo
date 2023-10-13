@@ -24,6 +24,6 @@ def _isCloseToList(word, cleanTerms, minEditDiff):
         diff = float(editdistance.eval(word, known)) / \
             min(len(word), len(known))
         if diff < minEditDiff:
-            # print '%s is too close (%2.4f) to %s'%(word, diff, known)
+            # print('%s is too close (%2.4f) to %s'%(word, diff, known))
             return True
     return False

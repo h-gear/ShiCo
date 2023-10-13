@@ -9,7 +9,7 @@ def loadTermFrequencies(sGlobPattern, dTfModels={}):
     if sModelName.endswith('.vocab'):
       sModelName = sModelName[:-6]
 
-    print "Loading %s" % sModelName
+    print("Loading %s" % sModelName)
     dTfModels[sModelName] = termFrequencies(sVocabFile)
 
   return dTfModels
@@ -17,12 +17,12 @@ def loadTermFrequencies(sGlobPattern, dTfModels={}):
 def tfs(dTfModels, aWords, bPrintTotalPerYear=False):
   for sModel in sorted(dTfModels.keys()):
     if bPrintTotalPerYear:
-      print "%s (%d):" % (sModel, dTfModels[sModel].iTotalNrOfTokens),
+      print("%s (%d):" % (sModel, dTfModels[sModel].iTotalNrOfTokens),)
     else:
-      print "%s:" % sModel,
+      print("%s:" % sModel,)
     for sWord in aWords:
-      print "%s (%d)" % (sWord, dTfModels[sModel][sWord]),
-    print
+      print("%s (%d)" % (sWord, dTfModels[sModel][sWord]),)
+    print()
 
 class termFrequencies:
   def __init__(self, sFile):
@@ -59,8 +59,8 @@ if __name__ == "__main__":
   oArgs = oArgsParser.parse_args()
 
   if oArgs.bVerbose:
-    print "Loading..."
+    print("Loading...")
   oTF = termFrequencies(oArgs.TERM_FREQUENCY_FILE)
 
   for sWord in oArgs.WORD:
-    print "Freq of %s: %d" % (sWord, oTF[sWord])
+    print("Freq of %s: %d" % (sWord, oTF[sWord]))
