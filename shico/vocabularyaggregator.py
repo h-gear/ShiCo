@@ -82,14 +82,14 @@ def _adaptiveAggregation(V, n, yIntervals, weightF, param, freq):
         V_prime = SortedDict({tx: V[tx] for tx in t})
 
         score = defaultdict(float)
-        for years_v, words_v in V_prime.iteritems():
+        for years_v, words_v in V_prime.items():
             mu_v = getRangeMiddle(years_v)
             fvt = f(mu_v, mu_t)
             for word, score_wv in words_v:
                 score[word] += fvt * score_wv
 
         # Top n terms w sorted by score_w
-        scoreList = [(k, v) for k, v in score.iteritems()]
+        scoreList = [(k, v) for k, v in score.items()]
         scoreList = sorted(scoreList, key=lambda pair: pair[1], reverse=True)
         topN = scoreList[:n]
 

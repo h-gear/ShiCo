@@ -15,7 +15,7 @@ Usage:
 '''
 from docopt import docopt
 
-from flask import Flask, current_app, jsonify
+from flask import Flask, current_app, jsonify, request
 from flask_cors import CORS
 
 import sys
@@ -52,41 +52,30 @@ def trackWord(terms):
     '''VocabularyMonitor.trackClouds service. Expects a list of terms to be
     sent to the Vocabulary monitor, and returns a JSON representation of the
     response.'''
-    print("1", terms, app.config)
-    print("1.1", app.config["trackParser"])
-    #params = app.config['trackParser'].parse_args()
-    params = { 'maxTerms': 5, 'maxRelatedTerms': 5, 'startKey': "", 'endKey': "", "minSim": "", 'wordBoost': "", 'forwards': "", "boostMethod": "", "algorithm": "", "aggWeighFunction": "", "aggWFParam": "", "aggYearsInInterval": "", "aggWordsPerYear": "", "doCleaning": "",}
-    print("2")
+    params = dict(request.args)
     termList = terms.split(',')
-    print("3")
     termList = [term.strip() for term in termList]
-    print("4")
     termList = [term.lower() for term in termList]
-    print("5")
     results, links = \
-        app.config['vm'].trackClouds(termList, maxTerms=params['maxTerms'],
-                                     maxRelatedTerms=params['maxRelatedTerms'],
+        app.config['vm'].trackClouds(termList, maxTerms=int(params['maxTerms']),
+                                     maxRelatedTerms=int(params['maxRelatedTerms']),
                                      startKey=params['startKey'],
                                      endKey=params['endKey'],
-                                     minSim=params['minSim'],
-                                     wordBoost=params['wordBoost'],
+                                     minSim=float(params['minSim']),
+                                     wordBoost=int(params['wordBoost']),
                                      forwards=params['forwards'],
                                      sumSimilarity=params['boostMethod'],
-                                     algorithm=params['algorithm'],
+                                     algorithm=params['algorithm'].lower(),
                                      cleaningFunction=app.config['cleaningFunction'] if params[
             'doCleaning'] else None
         )
-    print("6")
     agg = VocabularyAggregator(weighF=params['aggWeighFunction'],
-                               wfParam=params['aggWFParam'],
-                               yearsInInterval=params['aggYearsInInterval'],
-                               nWordsPerYear=params['aggWordsPerYear']
+                               wfParam=int(params['aggWFParam']),
+                               yearsInInterval=int(params['aggYearsInInterval']),
+                               nWordsPerYear=int(params['aggWordsPerYear'])
                                )
-    print("7")
 
     aggResults, aggMetadata = agg.aggregate(results)
-    print("ResKeys", results.keys())
-    print("AggResKeys", aggResults.keys())
     stream = yearTuplesAsDict(aggResults)
     networks = yearlyNetwork(aggMetadata, aggResults, results, links)
     embedded = doSpaceEmbedding(app.config['vm'], results, aggMetadata)
@@ -98,7 +87,6 @@ def trackWord(terms):
 
 if __name__ == "__main__":
     arguments = docopt(__doc__)
-    print(arguments)
     files = arguments['-f']
     binary = not arguments['--non-binary']
     useMmap = arguments['--use-mmap']

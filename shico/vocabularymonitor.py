@@ -120,6 +120,7 @@ class VocabularyMonitor():
                             }
                   }
         '''
+
         if isinstance(seedTerms, six.string_types):
             seedTerms = [seedTerms]
         aSeedSet = seedTerms
@@ -132,15 +133,15 @@ class VocabularyMonitor():
         sortedKeys = self._models.keys()
 
         # Select starting key
-        if (startKey is not None):
+        if (startKey is not None and startKey != ""):
             if startKey not in sortedKeys:
-                raise KeyError('Key ' + startKey + ' not a valid model index')
+                raise KeyError('startKey ' + startKey + ' not a valid model index')
             keyIdx = sortedKeys.index(startKey)
             sortedKeys = sortedKeys[keyIdx:]
         # Select end key
-        if (endKey is not None):
+        if (endKey is not None and endKey != ""):
             if endKey not in sortedKeys:
-                raise KeyError('Key ' + endKey + ' not a valid model index')
+                raise KeyError('endKey ' + endKey + ' not a valid model index')
             keyIdx = sortedKeys.index(endKey)
             sortedKeys = sortedKeys[:keyIdx]
 
@@ -201,6 +202,7 @@ class VocabularyMonitor():
         '''Given a list of seed terms, queries the given model to produce a
         list of terms. A dictionary of links is also returned as a dictionary:
         { seed: [(word,weight),...]}'''
+
         dRelatedTerms = defaultdict(float)
         links = defaultdict(list)
 
@@ -224,7 +226,7 @@ class VocabularyMonitor():
 
         selectedTerms = set(word for word, weight in topTerms)
         links = {seed: _pruned(pairs, selectedTerms)
-                 for seed, pairs in links.iteritems()}
+                 for seed, pairs in links.items()}
         return topTerms, links
 
 

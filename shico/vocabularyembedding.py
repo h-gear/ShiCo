@@ -20,9 +20,10 @@ def _getPairwiseDistances(wordsT1, model):
 
 
 def _getMDSEmbedding(dists):
+    np.seterr(divide='ignore', invalid='ignore') # surpress divide by zero warnings
     seed = np.random.RandomState(seed=3)
     mds = manifold.MDS(n_components=2, max_iter=3000, eps=1e-9, random_state=seed,
-                       dissimilarity="precomputed", n_jobs=1)
+                       dissimilarity="precomputed", n_jobs=1, normalized_stress=False)
     xyEmbedding = mds.fit(dists).embedding_
     return xyEmbedding
 
@@ -52,7 +53,7 @@ def _findTransform(wordsT0, locsT0, wordsT1, locsT1):
     F0 = np.array(F0)
     F1 = np.array(F1)
 
-    T, residuals, rank, s = np.linalg.lstsq(F1, F0)
+    T, residuals, rank, s = np.linalg.lstsq(F1, F0, rcond=-1)
     return T
 
 
@@ -62,7 +63,7 @@ def doSpaceEmbedding(monitor, results, aggMetadata):
 
     wordsT0 = None
     locsT0 = None
-    for label, r in results.iteritems():
+    for label, r in results.items():
         model = monitor._models[label]
         wordsT1 = [w for w, _ in r]
 
