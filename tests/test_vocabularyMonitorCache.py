@@ -21,6 +21,6 @@ class VocabularyMonitorTestCache(VocabularyMonitorBase):
 
     def testLoadClass(self):
         '''Test models are of expected class'''
-        for label, model in self.vm._models.iteritems():
+        for label, model in self.vm._models.items():
             self.assertIsInstance(model, CachedW2VModelEvaluator,
                                   'Object should be a CachedW2VModelEvaluator')

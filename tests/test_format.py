@@ -35,7 +35,7 @@ class TestFormat(unittest.TestCase):
 
     def testGetRangeMiddle(self):
         '''Test finding middle of range works'''
-        self.assertEqual(fmt.getRangeMiddle('1951_1960'), 1955,
+        self.assertEqual(fmt.getRangeMiddle('1950_1959'), 1955,
                          'Middle of 50s decade should be 1955')
         self.assertEqual(fmt.getRangeMiddle('1959_1968', '1962_1971'), 1965,
                          'Middle of 60s decade should be 1965')
@@ -52,7 +52,7 @@ class TestFormat(unittest.TestCase):
         self.assertEqual(
             sorted(networks.keys()), list(self._aggPeriods.keys()),
             'A network should be created for each aggregation period')
-        for year, net in networks.iteritems():
+        for year, net in networks.items():
             self.assertEqual(sorted(net.keys()), sorted(['nodes', 'links']),
                              'Each network should contain "nodes" and "links"'
                              'but %s does not' % year)
@@ -74,7 +74,7 @@ class TestFormat(unittest.TestCase):
         self.assertEqual(sorted(dicts.keys()), list(self._aggVocab.keys()),
                          'A dictionary should be created for each aggregated '
                          'vocabulary')
-        for year, d in dicts.iteritems():
+        for year, d in dicts.items():
             self.assertEqual(len(d), len(self._aggVocab[year]),
                              'Dict should have same number of items as '
                              'aggregated vocabulary but %s does not' % year)

@@ -98,7 +98,7 @@ class TestVocabularyAggregation(unittest.TestCase):
         yearsInInterval = 2
         agg = shVA(yearsInInterval=yearsInInterval, yIntervalFreq=1)
         _, times = agg.aggregate(self._data)
-        for year, values in times.iteritems():
+        for year, values in times.items():
             self.assertEqual(len(values), yearsInInterval,
                              'Should have equal number of years in interval '
                              'but %s does not' % year)

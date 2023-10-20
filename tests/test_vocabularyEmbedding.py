@@ -21,6 +21,6 @@ class VocabularyEmbeddingTest(unittest.TestCase):
         '''Test word embeddings'''
         self.assertGreater(len(self.embedded), 0,
                            'Dictionary should contain some years')
-        for year, embeddings in self.embedded.iteritems():
+        for year, embeddings in self.embedded.items():
             self.assertGreater(len(embeddings), 0,
                                'Embeddings should contain some words')

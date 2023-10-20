@@ -43,7 +43,7 @@ class ServerTest(unittest.TestCase):
         '''Check the structure of the stream data is correct.'''
         wordsPerResult = None
 
-        for year,wordList in data.iteritems():
+        for year,wordList in data.items():
             nWordsInList = len(wordList)
             self.assertGreater(nWordsInList, 0,
                                'Word lists should contain words')
@@ -62,7 +62,7 @@ class ServerTest(unittest.TestCase):
 
     def _checkNetwork(self, data):
         '''Check the structure of the network data is correct.'''
-        for year, net in data.iteritems():
+        for year, net in data.items():
             self.assertEqual(sorted(net.keys()), sorted(['nodes', 'links']),
                              'Each network should contain "nodes" and "links"'
                              'but %s does not' % year)
@@ -80,7 +80,7 @@ class ServerTest(unittest.TestCase):
 
     def _checkEmbedded(self, data):
         '''Check the structure of the embedded data is correct.'''
-        for year, embeddings in data.iteritems():
+        for year, embeddings in data.items():
             self.assertGreater(len(embeddings), 0,
                                'List should contain some embeddings')
             for item in embeddings:
@@ -90,7 +90,7 @@ class ServerTest(unittest.TestCase):
 
     def _checkVocab(self, data):
         '''Check the structure of the vocabularies data is correct.'''
-        for year, seedVocabs in data.iteritems():
+        for year, seedVocabs in data.items():
             self.assertGreater(len(seedVocabs), 0,
                                'List should contain some seed-vocabulary dictionaries')
 
