@@ -66,6 +66,12 @@ class VocabularyAggregator():
                                     param=self._wfParam,
                                     freq=self._yIntervalFreq)
 
+def _addTiedTopTerms(termCounter, topTerms):
+    minValue = min([x[1] for x in topTerms])
+    topTerms.extend([ x for x in list(dict(termCounter).items())
+                        if x[1] == minValue and x not in topTerms ])
+    return topTerms
+
 
 def _adaptiveAggregation(V, n, yIntervals, weightF, param, freq):
     '''Apply adaptive aggregation algorithm to the given vocabulary.
@@ -92,6 +98,7 @@ def _adaptiveAggregation(V, n, yIntervals, weightF, param, freq):
         scoreList = [(k, v) for k, v in score.items()]
         scoreList = sorted(scoreList, key=lambda pair: pair[1], reverse=True)
         topN = scoreList[:n]
+        topN = _addTiedTopTerms(scoreList, topN)
 
         finalVocabs[str(int(mu_t))] = topN
         periodGroups[str(int(mu_t))] = t

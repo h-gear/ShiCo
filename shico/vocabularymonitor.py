@@ -266,12 +266,20 @@ def _pruned(pairs, words):
     return [(word, weight) for word, weight in pairs if word in words]
 
 
+def _addTiedTopTerms(termCounter, topTerms):
+    minValue = min([x[1] for x in topTerms])
+    topTerms.extend([ x for x in list(dict(termCounter).items())
+                        if x[1] == minValue and x not in topTerms ])
+    return topTerms
+
+
 def _getCommonTerms(terms, N):
     '''Return a the top N terms of the given list. Terms are given as a
     dictionary of { term: weight } and the top terms are the terms with the
     highest weights.'''
     termCounter = Counter(terms)
     topTerms = termCounter.most_common(N)
+    topTerms = _addTiedTopTerms(termCounter, topTerms)
     return topTerms
 
 
