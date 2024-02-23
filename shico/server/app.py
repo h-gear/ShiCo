@@ -10,8 +10,8 @@ Usage:
   -c FUNCTIONNAME  Name of cleaning function to be applied to output.
                    (example: shico.extras.cleanTermList)
   -p PORT          Port in which ShiCo should run [default: 8000].
-  --use-mmap       ??? [default: False]
-  --w2v-format     ??? [default: True]
+  --use-mmap       set mMap use to True [default: False]
+  --w2v-format     set word2vector format to False [default: True]
 '''
 from docopt import docopt
 
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     files = arguments['-f']
     binary = not arguments['--non-binary']
     useMmap = arguments['--use-mmap']
-    w2vFormat = arguments['--w2v-format']
+    w2vFormat = not bool(arguments['--w2v-format'])
     cleaningFunctionStr = arguments['-c']
     port = int(arguments['-p'])
 

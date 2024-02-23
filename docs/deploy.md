@@ -7,26 +7,46 @@ If you want to run your own instance of ShiCo, there are a few things you will n
 
 ## Word2vec models
 
-You are welcome to use our [existing w2v models](http://doi.org/10.5281/zenodo.1189328). If you do, please contact us for more details on how the models were build and to know how to cite our work. You can also [create your own](./buildingModels.md) models, based on your own corpus.
+You are welcome to use our [existing w2v models](http://doi.org/10.5281/zenodo.1189328):
+```
+curl -o word2vecModels.tgz https://zenodo.org/records/1189328/files/word2vecModels.tgz
+tar zxf word2vecModels.tgz
+```
+
+If you use these models, please contact us for more details on how the models were build and to know how to cite our work. You can also [create your own](./buildingModels.md) models, based on your own corpus.
 
 ## Launching the back end
 
-Once you have downloaded the code (or clone this repo), and install all Python requirements (contained in *requirements.txt*), you can launch the flask server as follows:
+First download the code (or clone this repo) and install all Python requirements (contained in *requirements.txt*):
 ```
-$ python shico/server/app.py -f "word2vecModels/????_????.w2v"
+git clone https://github.com/h-gear/ShiCo.git
+cd ShiCo
+python3 -m venv --prompt shico venv3
+source venv3/bin/activate
+pip install -r requirements.txt
 ```
 
-*Note:* loading the word2vec models takes some time and may consume a large amount of memory.
+Next, launch the flask server as follows:
+```
+python shico/server/app.py -f "../word2vecModels/????_????.w2v"
+```
+
+*Note:* loading the word2vec models takes some time and may consume a large amount of memory. 
+If they do not fit in your computer's memory (error message: Killed), 
+you might want to remove some of the model files and relaunch the server:
+```
+rm -f ../word2vecModels/19?[1-9]*
+```
 
 You can check that the server is up and running by connecting to the server using curl (or your web browser):
 ```
-http://localhost:8000/load-settings
+curl http://localhost:8000/load-settings
 ```
 
 Alternatively you use [Gunicorn](http://gunicorn.org/), by setting your configuration on *shico/server/config.py* and then running:
 
 ```
-$ gunicorn --bind 0.0.0.0:8000 --timeout 1200 shico.server.wsgi:app
+gunicorn --bind 0.0.0.0:8000 --timeout 1200 shico.server.wsgi:app
 ```
 
 ## Launching the front end (does not work)
@@ -41,12 +61,12 @@ The necessary files for serving the front end are located in the *webapp* folder
 
 If you are familiar with the Javascript world, you can use the *gulp* tasks provided. You can serve your front end as follows (from the *webapp* folder):
 ```
-$ gulp serve # gulp and phantomjs do not run at our systems
+gulp serve # gulp and phantomjs do not run at our systems
 ```
 
 You can build a deployable version (minified, uglified, etc) as follows:
 ```
-$ gulp build
+gulp build
 ```
 This will build a deployable version on the *webapp/dist* folder.
 
@@ -58,13 +78,13 @@ If you are not familiar with the Javascript world (or just don't feel like build
 
 Once you have a *webapp/dist* folder (whether downloaded or self built) you can serve the content of it using your favorite web server. For example, you could use Python SimpleHTTPServer as follows (from the *webapp/dist* folder):
 ```
-$ python -m SimpleHTTPServer
+python -m SimpleHTTPServer
 ```
 
 ## Cleaning functions
 In some cases, resulting vocabularies may contain words which we would like to filter. ShiCo offers the possibility of using a *cleaning* function, for filtering vocabularies after they have been generated. To use this option, it is necessary to indicate the name of the cleaning function when starting the ShiCo server. A sample cleaning function is provided (*shico.extras.cleanTermList*). You can use this function as follows:
 ```
-$ python shico/server/app.py -c "shico.extras.cleanTermList"
+python shico/server/app.py -c "shico.extras.cleanTermList"
 ```
 
 If you are using gunicorn, in your *config.py*, you can set `cleaningFunctionStr` to the name of your cleaning function, for instance:
