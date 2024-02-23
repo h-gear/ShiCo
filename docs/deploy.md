@@ -13,11 +13,14 @@ curl -o word2vecModels.tgz https://zenodo.org/records/1189328/files/word2vecMode
 tar zxf word2vecModels.tgz
 ```
 
-If you use these models, please contact us for more details on how the models were build and to know how to cite our work. You can also [create your own](./buildingModels.md) models, based on your own corpus.
+If you use these models, please contact us for more details on how the models were build and 
+to know how to cite our work. You can also [create your own](./buildingModels.md) models, 
+based on your own corpus.
 
 ## Launching the back end
 
-First download the code (or clone this repo) and install all Python requirements (contained in *requirements.txt*):
+First download the code (or clone this repo) and install all Python requirements 
+(contained in *requirements.txt*):
 ```
 git clone https://github.com/h-gear/ShiCo.git
 cd ShiCo
@@ -38,12 +41,14 @@ you might want to remove some of the model files and relaunch the server:
 rm -f ../word2vecModels/19?[1-9]*
 ```
 
-You can check that the server is up and running by connecting to the server using curl (or your web browser):
+You can check that the server is up and running by connecting to the server using curl 
+(or your web browser):
 ```
 curl http://localhost:8000/load-settings
 ```
 
-Alternatively you use [Gunicorn](http://gunicorn.org/), by setting your configuration on *shico/server/config.py* and then running:
+Alternatively you use [Gunicorn](http://gunicorn.org/) for starting the server, 
+by setting your configuration on *shico/server/config.py* and then running:
 
 ```
 gunicorn --bind 0.0.0.0:8000 --timeout 1200 shico.server.wsgi:app

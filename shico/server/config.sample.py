@@ -1,5 +1,5 @@
 files = '<path-to-your-w2v-models>'
 binary = True
-useMmap = True
-w2vFormat = False
+useMmap = False
+w2vFormat = True
 cleaningFunctionStr = '<python.module.function>'
