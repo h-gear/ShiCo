@@ -3,6 +3,7 @@
 var path = require('path');
 var gulp = require('gulp');
 var conf = require('./conf');
+var scripts = require('./scripts');
 
 var $ = require('gulp-load-plugins')();
 
@@ -11,11 +12,7 @@ var _ = require('lodash');
 
 var browserSync = require('browser-sync');
 
-gulp.task('inject-reload', ['inject'], function() {
-  browserSync.reload();
-});
-
-gulp.task('inject', ['scripts'], function () {
+gulp.task('inject', gulp.series('scripts'), function () {
   var injectStyles = gulp.src([
     path.join(conf.paths.src, '/app/**/*.css')
   ], { read: false });
@@ -38,4 +35,8 @@ gulp.task('inject', ['scripts'], function () {
     .pipe($.inject(injectScripts, injectOptions))
     .pipe(wiredep(_.extend({}, conf.wiredep)))
     .pipe(gulp.dest(path.join(conf.paths.tmp, '/serve')));
+});
+
+gulp.task('inject-reload', gulp.series('inject'), function() {
+  browserSync.reload();
 });

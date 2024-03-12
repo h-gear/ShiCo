@@ -18,7 +18,7 @@
     function getParameters () {
       vm.hide = false;
       vm.readOnly = true;
-      vm.text = JSON.stringify(TrackerParametersService.getParameters());
+      vm.text = TrackerParametersService.getParameters().toJSON();
       vm.btnText = 'Ok';
     }
 
@@ -32,7 +32,7 @@
     function closeParamIO() {
       vm.hide = true;
       if(!vm.readOnly) {
-        var params = JSON.parse(vm.text);
+        var params = angular.fromJson(vm.text);
         TrackerParametersService.setParameters(params);
       }
     }

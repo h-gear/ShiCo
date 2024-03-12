@@ -82,7 +82,7 @@
       }
     };
 
-    function postProcess(e) {
+    function postProcess() {
       // Remove old labels
       d3.selectAll(".label").remove();
 
